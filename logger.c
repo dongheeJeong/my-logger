@@ -141,8 +141,9 @@ void * write_log(void * params)
 			/* 한 문장의 길이 측정 (len_s) */
 			while (ptr < &msg[len_read] && *ptr != '\n')
 				++ptr, ++len_s;
-
-			++ptr, ++len_s; /* 문장의 마지막에 1개의 개행문자를 포함하기 위한 증가 */
+			
+			if (ptr < &msg[len_read])
+				++ptr, ++len_s; /* 문장의 마지막에 1개의 개행문자를 포함하기 위한 증가 */
 
 #ifndef DEBUG
 			if (write(p->fd_log, base, len_s) < 0) {
@@ -285,12 +286,12 @@ int main(void)
 
 		/* Count clients */
 		pthread_mutex_lock(&mutex2);
-		debug("Current connected num: [%d]", ++num_accept);
+		++num_accept;
 		pthread_mutex_unlock(&mutex2);
 
 		if (sockfd_clnt < 0) {
 			if(errno == EINTR) continue;
-			debug("accept() error: %s.", strerror(errno));
+			debug("accept() error: %s. Client Count: %d", strerror(errno), num_accept);
 			exit(1);
 		}
 
