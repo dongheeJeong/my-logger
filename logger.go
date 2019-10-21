@@ -71,7 +71,7 @@ func main() {
 
 	/* Delete unix-domain-socket if exists. */
 	if err := os.Remove(UNIX_SOCK); err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	log.Println("Listening ... [", UNIX_SOCK, "]");
 
